@@ -10,6 +10,16 @@ local M = {
   ---@module "neo-tree"
   ---@type neotree.Config?
   opts = {
+    close_if_last_window = true,
+  },
+  keys = {
+    {
+      "<leader>fe",
+      function()
+        require("neo-tree.command").execute({ toggle = true})
+      end,
+      desc = "Explorer NeoTree",
+    },
   },
 }
 
