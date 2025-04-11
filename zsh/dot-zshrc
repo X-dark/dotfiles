@@ -1,0 +1,103 @@
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+
+  #fzf-tab settings
+  zstyle ':fzf-tab:*' query-string prefix first
+  # disable sort when completing `git checkout`
+  zstyle ':completion:*:git-checkout:*' sort false
+  # set descriptions format to enable group support
+  # NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
+  zstyle ':completion:*:descriptions' format '[%d]'
+  # set list-colors to enable filename colorizing
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+  # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+  zstyle ':completion:*' menu no
+  # preview directory's content with eza when completing cd
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+  # custom fzf flags
+  # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
+  zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+  # To make fzf-tab follow FZF_DEFAULT_OPTS.
+  # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
+  zstyle ':fzf-tab:*' use-fzf-default-opts yes
+  # switch group using `<` and `>`
+  zstyle ':fzf-tab:*' switch-group '<' '>'
+
+  #carapace
+  zstyle ':completion:*' menu select
+  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+  zstyle ':fzf-tab:*' query-string ''
+
+
+  autoload -U +X bashcompinit
+  bashcompinit
+  source /opt/homebrew/etc/bash_completion.d/az
+
+  export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+  export HOMEBREW_UPGRADE_GREEDY='true'
+fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+setopt hist_ignore_all_dups
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+export HISTSIZE=200000
+export SAVEHIST=$HISTSIZE
+
+# starship
+eval "$(starship init zsh)"
+
+# eza
+alias ll='eza -l --git'
+alias tree='eza --tree'
+
+# carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+#Sheldon
+eval "$(sheldon source)"
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="${HOME}/.bin:$PATH"
+
+#eval $(keychain --eval --noinherit -q)
+#
+
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
+aws-profile-fetch(){
+  setopt localoptions extendedglob
+  while read -r line ; do
+    if [[ "$line" = (#b)[[:blank:]]#\[([^\]]##)\][[:blank:]]# ]]; then
+      section="${match[1]}"
+      echo "$section"
+    fi
+  done < $1
+}
+
+aws-profile(){
+  export AWS_PROFILE=$(aws-profile-fetch ~/.aws/credentials | fzf)
+}
+
+aws-profile-saml(){
+  export SAML2AWS_IDP_ACCOUNT=$(aws-profile-fetch  ~/.saml2aws | fzf)
+  saml2aws login
+  export AWS_PROFILE="saml"
+}
+
+print-colour(){
+  perl -e 'foreach $a(@ARGV){print "\e[48:2::".join(":",unpack("C*",pack("H*",$a)))."m$a\e[49m\n"}' "$@"
+}
+
+# vim
+alias vim='/opt/homebrew/bin/vim'
+export EDITOR=nvim
+
+alias velero='oc -n openshift-adp exec deployment/velero -c velero -it -- ./velero'
