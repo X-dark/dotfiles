@@ -1,6 +1,6 @@
 local M = {
   "neovim/nvim-lspconfig",
-  version = '*',
+  --version = '*',
   opts = function()
     ---@class PluginLspOpts
     local ret = {
@@ -212,7 +212,8 @@ local M = {
           return
         end
       end
-      require("lspconfig")[server].setup(server_opts)
+      vim.lsp.enable(server)
+      vim.lsp.config(server, server_opts)
     end
     for server, server_opts in pairs(servers) do
       if server_opts then
