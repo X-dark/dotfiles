@@ -1,6 +1,6 @@
 local M = {
   'nvimtools/none-ls.nvim',
-  opts = function ()
+  opts = function()
     local null_ls = require("null-ls")
     local ret = {
       sources = {

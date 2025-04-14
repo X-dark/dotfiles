@@ -20,7 +20,7 @@ local M = {
         severity_sort = true,
         signs = {
           text = {
-            [vim.diagnostic.severity.ERROR] ="",
+            [vim.diagnostic.severity.ERROR] = "",
             [vim.diagnostic.severity.WARN] = "",
             [vim.diagnostic.severity.HINT] = "",
             [vim.diagnostic.severity.INFO] = "",
@@ -120,23 +120,22 @@ local M = {
 
   ---@param opts PluginLspOpts
   config = function(_, opts)
-
-  local _supports_method = {}
-  ---@param method string
-  ---@param fn fun(client:vim.lsp.Client, buffer)
-  local function on_supports_method(method, fn)
-    _supports_method[method] = _supports_method[method] or setmetatable({}, { __mode = "k" })
-    return vim.api.nvim_create_autocmd("User", {
-      pattern = "LspSupportsMethod",
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        local buffer = args.data.buffer ---@type number
-        if client and method == args.data.method then
-          return fn(client, buffer)
-        end
-      end,
-    })
-  end
+    local _supports_method = {}
+    ---@param method string
+    ---@param fn fun(client:vim.lsp.Client, buffer)
+    local function on_supports_method(method, fn)
+      _supports_method[method] = _supports_method[method] or setmetatable({}, { __mode = "k" })
+      return vim.api.nvim_create_autocmd("User", {
+        pattern = "LspSupportsMethod",
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          local buffer = args.data.buffer ---@type number
+          if client and method == args.data.method then
+            return fn(client, buffer)
+          end
+        end,
+      })
+    end
     -- diagnostics signs
     if vim.fn.has("nvim-0.10.0") == 0 then
       if type(opts.diagnostics.signs) ~= "boolean" then
@@ -153,9 +152,9 @@ local M = {
       if opts.inlay_hints.enabled then
         on_supports_method("textDocument/inlayHint", function(client, buffer)
           if
-            vim.api.nvim_buf_is_valid(buffer)
-            and vim.bo[buffer].buftype == ""
-            and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+              vim.api.nvim_buf_is_valid(buffer)
+              and vim.bo[buffer].buftype == ""
+              and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
           then
             vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
           end
@@ -176,19 +175,19 @@ local M = {
 
     if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
       opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
-        or function(diagnostic)
-          local icons = {
-            Error = " ",
-            Warn  = " ",
-            Hint  = " ",
-            Info  = " ",
-          }
-          for d, icon in pairs(icons) do
-            if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-              return icon
+          or function(diagnostic)
+            local icons = {
+              Error = " ",
+              Warn  = " ",
+              Hint  = " ",
+              Info  = " ",
+            }
+            for d, icon in pairs(icons) do
+              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+                return icon
+              end
             end
           end
-        end
     end
 
     vim.diagnostic.config(vim.deepcopy(opts.diagnostics))

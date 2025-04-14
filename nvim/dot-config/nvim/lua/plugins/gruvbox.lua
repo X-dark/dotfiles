@@ -1,4 +1,4 @@
-return {
+local M = {
   {
     'morhetz/gruvbox',
     config = function()
@@ -6,3 +6,5 @@ return {
     end,
   }
 }
+
+return { M }
