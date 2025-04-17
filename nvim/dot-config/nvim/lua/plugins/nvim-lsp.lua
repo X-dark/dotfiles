@@ -171,9 +171,9 @@ local M = {
           or function(diagnostic)
             local icons = {
               Error = " ",
-              Warn  = " ",
-              Hint  = " ",
-              Info  = " ",
+              Warn = " ",
+              Hint = " ",
+              Info = " ",
             }
             for d, icon in pairs(icons) do
               if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
