@@ -6,7 +6,8 @@
   "workspace": {
     "library": [
       "lua",
-      "$VIMRUNTIME"
+      "$VIMRUNTIME",
+      "~/.local/share/nvim/lazy/"
     ],
     "checkThirdParty": false
   }

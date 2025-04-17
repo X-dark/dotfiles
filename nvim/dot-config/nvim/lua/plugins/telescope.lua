@@ -1,7 +1,7 @@
 local M = {
   "nvim-telescope/telescope.nvim",
   tag = "0.1.8",
-  dependencies = { 'nvim-lua/plenary.nvim' },
+  dependencies = { "nvim-lua/plenary.nvim" },
   keys = {
     {
       "<leader>ff",
@@ -9,7 +9,7 @@ local M = {
         require("telescope.builtin").find_files({
           follow = true,
         })
-      end
+      end,
     },
     {
       "<leader>fg",
@@ -17,9 +17,9 @@ local M = {
         require("telescope.builtin").live_grep({
           additional_args = {
             "--follow",
-          }
+          },
         })
-      end
+      end,
     },
     {
       "<leader>fb",
@@ -27,13 +27,13 @@ local M = {
         require("telescope.builtin").buffers({
           ignore_current_buffer = true,
         })
-      end
+      end,
     },
     {
       "<leader>fh",
       function()
         require("telescope.builtin").help_tags()
-      end
+      end,
     },
   },
 }
