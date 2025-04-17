@@ -9,14 +9,7 @@ local M = {
       diagnostics = {
         underline = true,
         update_in_insert = false,
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-          -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-          -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-          -- prefix = "icons",
-        },
+        virtual_lines = true,
         severity_sort = true,
         signs = {
           text = {
@@ -89,7 +82,7 @@ local M = {
             yaml = {
               schemas = {
                 ["http://json.schemastore.org/kustomization"] = "kustomization.yaml",
-                --["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = "/*.yaml",
+                ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.29.10/all.json"] = "/*.yaml",
               },
             },
             redhat = {
@@ -152,9 +145,9 @@ local M = {
       if opts.inlay_hints.enabled then
         on_supports_method("textDocument/inlayHint", function(client, buffer)
           if
-              vim.api.nvim_buf_is_valid(buffer)
-              and vim.bo[buffer].buftype == ""
-              and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+            vim.api.nvim_buf_is_valid(buffer)
+            and vim.bo[buffer].buftype == ""
+            and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
           then
             vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
           end
@@ -175,19 +168,19 @@ local M = {
 
     if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
       opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
-          or function(diagnostic)
-            local icons = {
-              Error = " ",
-              Warn  = " ",
-              Hint  = " ",
-              Info  = " ",
-            }
-            for d, icon in pairs(icons) do
-              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-                return icon
-              end
+        or function(diagnostic)
+          local icons = {
+            Error = " ",
+            Warn = " ",
+            Hint = " ",
+            Info = " ",
+          }
+          for d, icon in pairs(icons) do
+            if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+              return icon
             end
           end
+        end
     end
 
     vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
@@ -223,6 +216,10 @@ local M = {
       end
     end
   end,
+
+  keys = {
+    { "<leader>gf", vim.lsp.buf.format, desc = "Format buffer" },
+  },
 }
 
 return { M }
