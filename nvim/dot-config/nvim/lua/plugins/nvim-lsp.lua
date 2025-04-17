@@ -82,7 +82,7 @@ local M = {
             yaml = {
               schemas = {
                 ["http://json.schemastore.org/kustomization"] = "kustomization.yaml",
-                --["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.1-standalone-strict/all.json"] = "/*.yaml",
+                ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.29.10/all.json"] = "/*.yaml",
               },
             },
             redhat = {
