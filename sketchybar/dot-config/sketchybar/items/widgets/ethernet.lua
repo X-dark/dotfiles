@@ -1,10 +1,13 @@
-local icons = require("icons")
 local colors = require("colors")
+local icons = require("icons")
 local settings = require("settings")
 
+local interface = "en15"
 -- Execute the event provider binary which provides the event "network_update"
 -- for the network interface "en0", which is fired every 2.0 seconds.
-sbar.exec("$CONFIG_DIR/helpers/event_providers/network_load/bin/network_load en6 eth_network_update 2.0")
+sbar.exec(
+  "$CONFIG_DIR/helpers/event_providers/network_load/bin/network_load " .. interface .. " eth_network_update 2.0"
+)
 
 local popup_width = 250
 
@@ -64,10 +67,10 @@ local ethernet = sbar.add("item", "widgets.ethernet.padding", {
 local eth_bracket = sbar.add("bracket", "widgets.ethernet.bracket", {
   ethernet.name,
   eth_up.name,
-  eth_down.name
+  eth_down.name,
 }, {
   background = { color = colors.bg1 },
-  popup = { align = "center", height = 30 }
+  popup = { align = "center", height = 30 },
 })
 
 local hostname = sbar.add("item", {
@@ -82,7 +85,7 @@ local hostname = sbar.add("item", {
     string = "????????????",
     width = popup_width / 2,
     align = "right",
-  }
+  },
 })
 
 local ip = sbar.add("item", {
@@ -96,7 +99,7 @@ local ip = sbar.add("item", {
     string = "???.???.???.???",
     width = popup_width / 2,
     align = "right",
-  }
+  },
 })
 
 local mask = sbar.add("item", {
@@ -110,7 +113,7 @@ local mask = sbar.add("item", {
     string = "???.???.???.???",
     width = popup_width / 2,
     align = "right",
-  }
+  },
 })
 
 local router = sbar.add("item", {
@@ -136,20 +139,20 @@ eth_up:subscribe("eth_network_update", function(env)
     icon = { color = up_color },
     label = {
       string = env.upload,
-      color = up_color
-    }
+      color = up_color,
+    },
   })
   eth_down:set({
     icon = { color = down_color },
     label = {
       string = env.download,
-      color = down_color
-    }
+      color = down_color,
+    },
   })
 end)
 
-ethernet:subscribe({"wifi_change", "system_woke"}, function(env)
-  sbar.exec("ipconfig getifaddr en6", function(ip)
+ethernet:subscribe({ "wifi_change", "system_woke" }, function(env)
+  sbar.exec("ipconfig getifaddr " .. interface, function(ip)
     local connected = not (ip == "")
     ethernet:set({
       icon = {
@@ -167,17 +170,17 @@ end
 local function toggle_details()
   local should_draw = eth_bracket:query().popup.drawing == "off"
   if should_draw then
-    eth_bracket:set({ popup = { drawing = true }})
+    eth_bracket:set({ popup = { drawing = true } })
     sbar.exec("networksetup -getcomputername", function(result)
       hostname:set({ label = result })
     end)
-    sbar.exec("ipconfig getifaddr en6", function(result)
+    sbar.exec("ipconfig getifaddr " .. interface, function(result)
       ip:set({ label = result })
     end)
-    sbar.exec("networksetup -getinfo 'USB 10/100/1000 LAN 2' | awk -F 'Subnet mask: ' '/^Subnet mask: / {print $2}'", function(result)
+    sbar.exec("ipconfig getsummary " .. interface .. " | awk -F ' ' '/^subnet_mask/ {print $3}'", function(result)
       mask:set({ label = result })
     end)
-    sbar.exec("networksetup -getinfo 'USB 10/100/1000 LAN 2' | awk -F 'Router: ' '/^Router: / {print $2}'", function(result)
+    sbar.exec("ipconfig getsummary " .. interface .. " | awk -F ' ' '/Router / {print $3}'", function(result)
       router:set({ label = result })
     end)
   else
@@ -192,8 +195,8 @@ ethernet:subscribe("mouse.exited.global", hide_details)
 
 local function copy_label_to_clipboard(env)
   local label = sbar.query(env.NAME).label.value
-  sbar.exec("echo \"" .. label .. "\" | pbcopy")
-  sbar.set(env.NAME, { label = { string = icons.clipboard, align="center" } })
+  sbar.exec('echo "' .. label .. '" | pbcopy')
+  sbar.set(env.NAME, { label = { string = icons.clipboard, align = "center" } })
   sbar.delay(1, function()
     sbar.set(env.NAME, { label = { string = label, align = "right" } })
   end)
