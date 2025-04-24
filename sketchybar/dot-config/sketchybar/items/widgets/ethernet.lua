@@ -2,7 +2,7 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
-local interface = "en15"
+local interface = "en16"
 -- Execute the event provider binary which provides the event "network_update"
 -- for the network interface "en0", which is fired every 2.0 seconds.
 sbar.exec(
