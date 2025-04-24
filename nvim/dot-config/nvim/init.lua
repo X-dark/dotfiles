@@ -10,3 +10,5 @@ vim.opt.shiftround = true
 vim.opt.cursorcolumn = true
 
 vim.keymap.set("n", "<Leader>gf", vim.lsp.buf.format, { desc = "Format current Buffer" })
+
+vim.cmd.colorscheme("catppuccin")
