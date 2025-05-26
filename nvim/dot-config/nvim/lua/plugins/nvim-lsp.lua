@@ -1,6 +1,6 @@
 local M = {
   "neovim/nvim-lspconfig",
-  --version = '*',
+  version = '*',
   opts = function()
     ---@class PluginLspOpts
     local ret = {
