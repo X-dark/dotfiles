@@ -1,6 +1,6 @@
 local M = {
   "nvim-telescope/telescope.nvim",
-  tag = "0.1.8",
+  branch = "0.1.x",
   dependencies = { "nvim-lua/plenary.nvim" },
   keys = {
     {
@@ -33,6 +33,14 @@ local M = {
       "<leader>fh",
       function()
         require("telescope.builtin").help_tags()
+      end,
+    },
+    {
+      "<leader>fd",
+      function()
+        require("telescope.builtin").diagnostics({
+          bufnr = 0,
+        })
       end,
     },
   },

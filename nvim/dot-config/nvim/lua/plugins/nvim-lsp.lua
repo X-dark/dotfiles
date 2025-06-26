@@ -1,6 +1,6 @@
 local M = {
   "neovim/nvim-lspconfig",
-  version = '*',
+  version = "*",
   opts = function()
     ---@class PluginLspOpts
     local ret = {
@@ -77,6 +77,15 @@ local M = {
           },
         },
         ruff = {},
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = "basic",
+              },
+            },
+          },
+        },
         yamlls = {
           settings = {
             yaml = {
