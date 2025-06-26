@@ -13,7 +13,7 @@ sbar.default({
     color = colors.white,
     padding_left = settings.paddings,
     padding_right = settings.paddings,
-    background = { image = { corner_radius = 9 } },
+    background = { image = { corner_radius = 12 } },
   },
   label = {
     font = {
@@ -27,11 +27,11 @@ sbar.default({
   },
   background = {
     height = 28,
-    corner_radius = 9,
+    corner_radius = 12,
     border_width = 2,
     border_color = colors.bg2,
     image = {
-      corner_radius = 9,
+      corner_radius = 12,
       border_color = colors.grey,
       border_width = 1
     }
@@ -39,7 +39,7 @@ sbar.default({
   popup = {
     background = {
       border_width = 2,
-      corner_radius = 9,
+      corner_radius = 12,
       border_color = colors.popup.border,
       color = colors.popup.bg,
       shadow = { drawing = true },
