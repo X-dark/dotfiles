@@ -4,6 +4,7 @@ local M = {
   version = "*",
 
   lazy = false,
+  priority = 49,
 
   opts = {
     preview = {
