@@ -1,0 +1,18 @@
+pool pacman_pool
+  depth = 1
+
+rule INSTALL
+  command = sudo pacman -S --noconfirm $pkg
+  pool = pacman_pool
+
+rule STOW_APP
+  command = stow --dotfile $app
+
+build stow: INSTALL
+  pkg = stow
+
+build nvim_pkg: INSTALL
+  pkg = neovim yaml-language-server dockerfile-language-server shellcheck shfmt bash-language-server ruff stylua lua-language-server
+
+build nvim: STOW_APP || stow nvim_pkg
+  app = nvim
