@@ -12,7 +12,7 @@ build stow: INSTALL
   pkg = stow
 
 build nvim_pkg: INSTALL
-  pkg = neovim yaml-language-server dockerfile-language-server shellcheck shfmt bash-language-server ruff stylua lua-language-server
+  pkg = neovim yaml-language-server dockerfile-language-server shellcheck shfmt bash-language-server ruff stylua lua-language-server ripgrep
 
 build nvim: STOW_APP || stow nvim_pkg
   app = nvim
