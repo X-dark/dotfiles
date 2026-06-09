@@ -1,0 +1,10 @@
+{
+  "haUrl": "http://yavanna.lan:8123",
+  "haToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI3NGQ3ZWQzMWIwZGQ0ODQyYWI2NDBjZjAxNDk1OWMzMSIsImlhdCI6MTc3ODYxOTc2NSwiZXhwIjoyMDkzOTc5NzY1fQ.WnGkpnnh1tzNGdHOZJdBKvcQI_LvmWzb6J1DD1BLuH4",
+  "entities": [
+    "light.light_bureau",
+    "light.lighbulb_lampe",
+    "light.lightbulb_sejour",
+    "light.lightbulb_salledejeux"
+  ]
+}
