@@ -60,12 +60,13 @@ local menu        = "onagre"
 -- Or execute your favorite apps at launch like this:
 --
 hl.on("hyprland.start", function ()
-  hl.exec_cmd("quickshell -c sshell")
+  hl.exec_cmd("qs -c noctalia-shell")
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("hypridle")
   hl.exec_cmd("keepassxc")
   hl.exec_cmd("nextcloud")
   hl.exec_cmd("yubico-authenticator")
+  hl.exec_cmd("/home/cedric/.local/bin/sunshine-start.sh")
 end)
 
 
@@ -78,7 +79,11 @@ end)
 hl.env("XCURSOR_SIZE", "22")
 hl.env("HYPRCURSOR_SIZE", "22")
 hl.env("HYPRCURSOR_THEME", "XCursor-Pro-Hyprcursor-Dark")
-hl.env("GTK_THEME", "Adwaita:dark")
+-- hl.env("GTK_THEME", "Adwaita:dark")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
+
+-- Disable Pulse on Wine (fallback to alsa)
+hl.env("WINEDLLOVERRIDES", "winepulse.drv=")
 
 
 -----------------------
@@ -301,6 +306,13 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("wmenu-run"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
+
+-- Noctalia
+local ipc = "qs -c noctalia-shell ipc call"
+
+hl.bind(mainMod .. " + space", hl.dsp.exec_cmd(ipc .. " launcher toggle"))
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd(ipc .. " sessionMenu lockAndSuspend"))
+
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
